@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Game</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div id="lobbyUI" style="position: absolute; top: 16px; left: 16px; background-color:#f2f2f2; width: 200px; padding: 16px; font-family: 'Sk-Modernist', sans-serif; font-size: 16px;"></div>
+    
+    <!-- Game Mode Modal -->
+    <div id="gameModeModal" style="display: block; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.5);">
+        <h2>Select Game Mode</h2>
+        <button onclick="startLocalGame()">Local</button>
+        <button onclick="startOnlineGame()">Online</button>
+    </div>
+
+    <script src="setup.js"></script>
+    <script src="networkingSetup.js"></script>
+    <script src="inputDebugUI.js"></script>
+    <script src="input.js"></script>
+    <script src="renderPlayer.js"></script>
+    <script src="lobbyUI.js"></script>
+    <script src="lobby.js"></script>
+    <script src="game.js"></script>
+</body>
+</html> 

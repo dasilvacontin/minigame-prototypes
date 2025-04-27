@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minigame Prototypes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            background: #c5d5de;
+            padding-top: 120px;
+            padding-bottom: 120px;
+        }
+        h2 {
+            margin-top: 120px;
+        }
+        .controller-img {
+            width: 32px;
+            transform: translate(0px, 10px);
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            
+            // Update game links based on environment
+            const gameLinks = {
+                'gnome-heist': {
+                    local: 'http://localhost:8082',
+                    public: './minigame-prototype-gnome-heist/public/index.html'
+                },
+                'turnip-tussle': {
+                    local: 'http://localhost:8083',
+                    public: './minigame-prototype-turnip-tussle/public/index.html'
+                }
+            };
+
+            // Update each game link
+            Object.entries(gameLinks).forEach(([game, urls]) => {
+                const link = document.querySelector(`a[href*="${urls.local}"]`);
+                if (link) {
+                    link.href = isLocalhost ? urls.local : urls.public;
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Minigame Prototypes</h1>
+    <p>I'm making a course about how to make multiplayer online games.</p>
+    <p>To decide which minigame I teach in the course, I've prototyped 3 minigames, and I would love to hear your feedback on how fun you find them. I'll let you know which one wins!</p>
+
+    <!-- Decomissioned minigame
+    <h2>1. Garden Glory</h2>
+    <ul>
+        <li>Pick up seeds and plant them in your plot to grow plants</li>
+        <li>Keep your plants hydrated, but not too much!</li>
+        <li>Harvest your plants to gain points, win the most points to win!</li>
+        <li>Overwater your opponents' plants to... planticide</li>
+    </ul>
+    <p>Controls:</p>
+    <ul>
+        <li>Left analog stick: move</li>
+        <li><img class="controller-img" src="switch_buttons_down.png" alt="Switch button">Pick up seeds / plant seeds</li>
+        <li><img class="controller-img" src="switch_buttons_right.png" alt="Switch button">Water</li>
+    </ul>
+    <a href="http://localhost:8081" target="_blank">Play Garden Glory</a>
+    -->
+
+
+    <h2>2. Gnome Heist</h2>
+    <img src="./minigame-prototype-gnome-heist/image.png" alt="Gnome Heist screenshot" style="width: 100%;">
+    <ul>
+        <li>Pick up plants to gain points</li>
+        <li>Avoid being seen by gnomes for too long, or you'll be respawned</li>
+        <li>Use bushes or obstacles to hide from gnomes</li>
+    </ul>
+    <p>Controls:</p>
+    <ul>
+        <li>Left analog stick: move</li>
+        <li><img class="controller-img" src="switch_buttons_down.png" alt="Switch button">HOLD bottom button: pick up plant</li>
+    </ul>
+    <a href="http://localhost:8082" target="_blank">Play Gnome Heist</a>
+
+
+    <h2>3. Turnip Tussle</h2>
+    <img src="./minigame-prototype-turnip-tussle/image.png" alt="Turnip Tussle screenshot" style="width: 100%;">
+    <ul>
+        <li>Pick up turnips and bring them to your chest to win points</li>
+        <li>Headbutt other players to stun them and make them drop their turnip</li>
+    </ul>
+    <p>Controls:</p>
+    <ul>
+        <li>Left analog stick: move</li>
+        <li><img class="controller-img" src="switch_buttons_down.png" alt="Switch button">HOLD: Pick up and carry Turnip</li>
+        <li><img class="controller-img" src="switch_buttons_right.png" alt="Switch button">Headbutt</li>
+    </ul>
+    <a href="http://localhost:8083" target="_blank">Play Turnip Tussle</a>
+    <h2>
+        Other
+    </h2>
+    <p>Are the controllers acting up? Check their status using this website: <a href="https://hardwaretester.com/gamepad" target="_blank">hardwaretester.com/gamepad</a></p>
+</body>
+</html>
