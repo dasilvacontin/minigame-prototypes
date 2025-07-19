@@ -11,8 +11,10 @@ const GNOME_SPEED_PATROLLING = 0.5; // Speed when patrolling
 const GNOME_DETECTION_RANGE = 300; // Detection range for gnomes
 
 // Define constants for player behavior
-const PLAYER_VISIBILITY_THRESHOLD = 1; // Time in seconds a player must be visible to be caught
+const PLAYER_VISIBILITY_THRESHOLD = 2; // Time in seconds a player must be visible to be caught
 const PLAYER_RESPAWN_TIME = 3; // Time in seconds before a player respawns
+const PLAYER_SPEED_BOOST_DURATION = 1; // Time in seconds for speed boost after collecting a plant
+const PLAYER_SPEED_BOOST_MULTIPLIER = 1.5; // Speed multiplier when boost is active
 
 let gameState = {
     entities: [],
@@ -589,12 +591,18 @@ function logic() {
         if (gamepad.left) dx -= 1;
         if (gamepad.right) dx += 1;
 
+        // Apply speed boost multiplier if active
+        let speedMultiplier = 1;
+        if (player.hasSpeedBoost) {
+            speedMultiplier = PLAYER_SPEED_BOOST_MULTIPLIER;
+        }
+
         if (dx !== 0 && dy !== 0) {
-            dx *= config.diagonalSpeed;
-            dy *= config.diagonalSpeed;
+            dx *= config.diagonalSpeed * speedMultiplier;
+            dy *= config.diagonalSpeed * speedMultiplier;
         } else {
-            dx *= config.playerSpeed;
-            dy *= config.playerSpeed;
+            dx *= config.playerSpeed * speedMultiplier;
+            dy *= config.playerSpeed * speedMultiplier;
         }
 
         const newX = player.x + dx;
@@ -701,6 +709,15 @@ function render() {
         switch (entity.type) {
             case 'player':
                 renderPlayer(ctx, entity, entity.gamepad);
+                
+                // Render speed boost indicator
+                if (entity.hasSpeedBoost) {
+                    ctx.strokeStyle = '#00FF00'; // Green color for speed boost
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.arc(entity.x, entity.y, entity.width / 2 + 5, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
                 break;
             case 'sign':
                 ctx.fillStyle = '#ECECEC';
@@ -791,7 +808,9 @@ function createPlayer(color, gamepadIndex) {
         width: 50,
         height: 50,
         color: color,
-        score: 0
+        score: 0,
+        speedBoostTimer: 0,
+        hasSpeedBoost: false
     };
     gameState.players.push(newPlayer);
     gameState.entities.push(newPlayer);
@@ -822,6 +841,15 @@ function handlePlayerActions(player) {
     }
     if (player.respawnScheduled === undefined) {
         player.respawnScheduled = false;
+    }
+
+    // Update speed boost timer
+    if (player.speedBoostTimer > 0) {
+        player.speedBoostTimer -= 1 / 60; // Assuming 60 FPS
+        if (player.speedBoostTimer <= 0) {
+            player.hasSpeedBoost = false;
+            player.speedBoostTimer = 0;
+        }
     }
 
     // Check if player is visible to any gnome
@@ -868,6 +896,10 @@ function handlePlayerActions(player) {
             const { gridX, gridY } = positionToGrid(closestPlant.plant.x, closestPlant.plant.y);
             gameState.gardenGrid[gridY][gridX] = null;
             player.collecting = null;
+            
+            // Activate speed boost when plant is collected
+            player.speedBoostTimer = PLAYER_SPEED_BOOST_DURATION;
+            player.hasSpeedBoost = true;
         }
     } else {
         player.collecting = null;
